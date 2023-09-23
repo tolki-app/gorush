@@ -8,7 +8,7 @@ WORKDIR /go/src/gorush
 
 COPY . .
 
-RUN go install
+RUN make install
 
 FROM alpine:latest
 
