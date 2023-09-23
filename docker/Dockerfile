@@ -8,10 +8,7 @@ WORKDIR /go/src/gorush
 
 COPY . .
 
-WORKDIR /go/src/gorush
 RUN go install
-
-FROM alpine:3.17
 
 FROM alpine:latest
 
