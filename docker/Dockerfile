@@ -1,27 +1,28 @@
+FROM golang:1.21-alpine AS build
+
+RUN apk add --no-cache git
+RUN apk add gcc build-base
+
+RUN mkdir -p /go/src/gorush
+WORKDIR /go/src/gorush
+
+COPY . .
+
+WORKDIR /go/src/gorush
+RUN make install
+
 FROM alpine:3.17
 
-ARG TARGETOS
-ARG TARGETARCH
-ARG USER=gorush
-ENV HOME /home/$USER
+FROM alpine:latest
 
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
-  org.label-schema.name="Gorush" \
-  org.label-schema.vendor="Bo-Yi Wu" \
-  org.label-schema.schema-version="1.0"
+# Create a new user and group 'appuser' (use any name you prefer)
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 
-# add new user
-RUN adduser -D $USER
-RUN apk add --no-cache ca-certificates mailcap && \
-  rm -rf /var/cache/apk/*
+# Change the ownership of the binary to the new user
+COPY --from=build /go/bin/gorush /usr/local/bin/
 
-COPY release/${TARGETOS}/${TARGETARCH}/gorush /bin/
+# Use the new user to run the binary
+USER appuser
 
-USER $USER
-WORKDIR $HOME
-
-EXPOSE 8088 9000
-HEALTHCHECK --start-period=1s --interval=10s --timeout=5s \
-  CMD ["/bin/gorush", "--ping"]
-
-ENTRYPOINT ["/bin/gorush"]
+# Set the entrypoint to your binary
+ENTRYPOINT ["gorush"]
