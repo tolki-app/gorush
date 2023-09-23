@@ -372,6 +372,10 @@ func GetIOSNotification(req *PushNotification) *apns2.Notification {
 		payload.ThreadID(req.ThreadID)
 	}
 
+	if len(req.TargetContentID) > 0 {
+		payload.TargetContentID(req.TargetContentID)
+	}
+
 	for k, v := range req.Data {
 		payload.Custom(k, v)
 	}
