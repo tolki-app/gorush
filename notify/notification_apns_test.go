@@ -12,8 +12,8 @@ import (
 	"github.com/appleboy/gorush/status"
 
 	"github.com/buger/jsonparser"
-	"github.com/sideshow/apns2"
 	"github.com/stretchr/testify/assert"
+	"github.com/tolki-app/apns2"
 )
 
 const (

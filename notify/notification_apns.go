@@ -17,10 +17,10 @@ import (
 	"github.com/appleboy/gorush/status"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/sideshow/apns2"
-	"github.com/sideshow/apns2/certificate"
-	"github.com/sideshow/apns2/payload"
-	"github.com/sideshow/apns2/token"
+	"github.com/tolki-app/apns2"
+	"github.com/tolki-app/apns2/certificate"
+	"github.com/tolki-app/apns2/payload"
+	"github.com/tolki-app/apns2/token"
 	"golang.org/x/net/http2"
 )
 
@@ -438,7 +438,7 @@ Retry:
 			if err != nil || (res != nil && res.StatusCode != http.StatusOK) {
 				if err == nil {
 					// error message:
-					// ref: https://github.com/sideshow/apns2/blob/master/response.go#L14-L65
+					// ref: https://github.com/tolki-app/apns2/blob/master/response.go#L14-L65
 					err = errors.New(res.Reason)
 				}
 

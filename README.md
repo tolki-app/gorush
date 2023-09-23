@@ -69,7 +69,7 @@ A push notification micro server using [Gin](https://github.com/gin-gonic/gin) f
 ## Features
 
 - Support [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) using [go-fcm](https://github.com/appleboy/go-fcm) library for Android.
-- Support [HTTP/2](https://http2.github.io/) Apple Push Notification Service using [apns2](https://github.com/sideshow/apns2) library.
+- Support [HTTP/2](https://http2.github.io/) Apple Push Notification Service using [apns2](https://github.com/tolki-app/apns2) library.
 - Support [HMS Push Service](https://developer.huawei.com/consumer/en/hms/huawei-pushkit) using [go-hms-push](https://github.com/msalihkarakasli/go-hms-push) library for Huawei Devices.
 - Support [YAML](https://github.com/go-yaml/yaml) configuration.
 - Support command line to send single Android or iOS notification.

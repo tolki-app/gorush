@@ -27,13 +27,13 @@ require (
 	github.com/msalihkarakasli/go-hms-push v0.0.0-20210731212030-00e7b986815b
 	github.com/prometheus/client_golang v1.14.0
 	github.com/rs/zerolog v1.29.0
-	github.com/sideshow/apns2 v0.23.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.15.0
 	github.com/stretchr/testify v1.8.2
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/thoas/stats v0.0.0-20190407194641-965cb2de1678
 	github.com/tidwall/buntdb v1.2.10
+	github.com/tolki-app/apns2 v0.23.0
 	go.opencensus.io v0.24.0
 	go.uber.org/atomic v1.10.0
 	golang.org/x/crypto v0.7.0
