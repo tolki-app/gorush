@@ -1,40 +1,31 @@
-# Compiled Object files, Static and Dynamic libs (Shared Objects)
-*.o
-*.a
-*.so
-
-# Folders
-_obj
-_test
-
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
-
-*.cgo1.go
-*.cgo2.c
-_cgo_defun.c
-_cgo_gotypes.go
-_cgo_export.*
-
-_testmain.go
-
+.vscode
+**/__debug_bin
+**/__pycache__
+# Binaries for programs and plugins
 *.exe
-*.test
-*.prof
+*.exe~
+*.dll
+*.so
+*.dylib
 
-gin-bin
-key.pem
-.DS_Store
-gorush/log/*.log
-gorush.db
-.cover
-*.db*
-coverage.txt
-dist
-custom
-release
-coverage.txt
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+*.pyc
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+.vscode
+__pycache__
+.venv
+.idea
 node_modules
-config.yml
-dist/
+.chroma
+.pytest_cache
+__debug_bin*
+.terraform
+
+mocks/
+config.yaml
