@@ -1342,3 +1342,26 @@ Or you can deploy gorush to alternative solution like [netlify functions](https:
 Copyright 2019 Bo-Yi Wu [@appleboy](https://twitter.com/appleboy).
 
 Licensed under the MIT License.
+
+
+curl -v \
+  --header "authorization: bearer ${AUTHENTICATION_TOKEN}" \
+  --header "apns-topic: com.paveltaran.tolki.voip-ptt" \
+  --header "apns-push-type: pushtotalk" \
+  --header "apns-priority: 10" \
+  --header "apns-expiration: 0" \
+  --data '{"aps":{}}' \
+  --http2  https://api.development.push.apple.com:443/3/device/fad49d233e0f649d659f0dcdacf86894c2f6881f3a6115638c1e62df1fa1b7e1
+
+
+curl -v \
+  --cert "${CERTIFICATE_FILE_NAME}" \
+  --cert-type DER \
+  --key "${CERTIFICATE_KEY_FILE_NAME}" \
+  --key-type PEM \
+  --header "apns-topic: com.paveltaran.tolki.voip-ptt" \
+  --header "apns-push-type: pushtotalk" \
+  --header "apns-priority: 10" \
+  --header "apns-expiration: 0" \
+  --data '{"aps":{}}' \
+  --http2  https://api.push.apple.com:443/3/device/fad49d233e0f649d659f0dcdacf86894c2f6881f3a6115638c1e62df1fa1b7e1

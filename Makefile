@@ -145,3 +145,6 @@ generate_proto: generate_proto_go generate_proto_js
 
 version:
 	@echo $(VERSION)
+
+push:
+	git add . && git commit -m "$(shell date)" && git push origin main
