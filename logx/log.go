@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/appleboy/gorush/core"
+	"github.com/tolki-app/gorush/core"
 
 	"github.com/mattn/go-isatty"
 	"github.com/sirupsen/logrus"
@@ -33,7 +33,7 @@ type LogPushEntry struct {
 
 var isTerm bool
 
-//nolint
+// nolint
 func init() {
 	isTerm = isatty.IsTerminal(os.Stdout.Fd())
 }

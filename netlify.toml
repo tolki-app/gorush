@@ -4,7 +4,7 @@
 
 [build.environment]
   GO_VERSION = "1.20"
-  GO_IMPORT_PATH = "github.com/appleboy/gorush"
+  GO_IMPORT_PATH = "github.com/tolki-app/gorush"
   GO111MODULE = "on"
 
 [[redirects]]

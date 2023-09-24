@@ -2,10 +2,10 @@
 
 A push notification micro server using [Gin](https://github.com/gin-gonic/gin) framework written in Go (Golang) and see the [demo app](https://github.com/appleboy/flutter-gorush).
 
-[![Run Lint and Testing](https://github.com/appleboy/gorush/actions/workflows/lint.yml/badge.svg)](https://github.com/appleboy/gorush/actions/workflows/lint.yml)
-[![GoDoc](https://godoc.org/github.com/appleboy/gorush?status.svg)](https://pkg.go.dev/github.com/appleboy/gorush)
+[![Run Lint and Testing](https://github.com/tolki-app/gorush/actions/workflows/lint.yml/badge.svg)](https://github.com/tolki-app/gorush/actions/workflows/lint.yml)
+[![GoDoc](https://godoc.org/github.com/tolki-app/gorush?status.svg)](https://pkg.go.dev/github.com/tolki-app/gorush)
 [![codecov](https://codecov.io/gh/appleboy/gorush/branch/master/graph/badge.svg)](https://codecov.io/gh/appleboy/gorush)
-[![Go Report Card](https://goreportcard.com/badge/github.com/appleboy/gorush)](https://goreportcard.com/report/github.com/appleboy/gorush)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tolki-app/gorush)](https://goreportcard.com/report/github.com/tolki-app/gorush)
 [![codebeat badge](https://codebeat.co/badges/0a4eff2d-c9ac-46ed-8fd7-b59942983390)](https://codebeat.co/projects/github-com-appleboy-gorush)
 [![Docker Pulls](https://img.shields.io/docker/pulls/appleboy/gorush.svg)](https://hub.docker.com/r/appleboy/gorush/)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/8ab14c9f-44fd-4d9a-8bba-f73f76d253b1/deploy-status)](https://app.netlify.com/sites/gorush/deploys)
@@ -221,30 +221,30 @@ How to send push notification using `gorush` command? (Android or iOS)
 
 ### Download a binary
 
-The pre-compiled binaries can be downloaded from [release page](https://github.com/appleboy/gorush/releases).
+The pre-compiled binaries can be downloaded from [release page](https://github.com/tolki-app/gorush/releases).
 
 With `Go` installed
 
 ```sh
-go get -u -v github.com/appleboy/gorush
+go get -u -v github.com/tolki-app/gorush
 ```
 
 On linux
 
 ```sh
-wget https://github.com/appleboy/gorush/releases/download/v1.16.1/gorush_1.16.1_linux_amd64.tar.gz -O - | tar -xz
+wget https://github.com/tolki-app/gorush/releases/download/v1.16.1/gorush_1.16.1_linux_amd64.tar.gz -O - | tar -xz
 ```
 
 On macOS (Intel amd64)
 
 ```sh
-wget -c https://github.com/appleboy/gorush/releases/download/v1.16.1/gorush_1.16.1_darwin_amd64.tar.gz -O - | tar -xz
+wget -c https://github.com/tolki-app/gorush/releases/download/v1.16.1/gorush_1.16.1_darwin_amd64.tar.gz -O - | tar -xz
 ```
 
 On macOS (Apple arm64)
 
 ```sh
-wget -c https://github.com/appleboy/gorush/releases/download/v1.16.1/gorush_1.16.1_darwin_arm64.tar.gz -O - | tar -xz
+wget -c https://github.com/tolki-app/gorush/releases/download/v1.16.1/gorush_1.16.1_darwin_arm64.tar.gz -O - | tar -xz
 ```
 
 ### Install from source
@@ -261,7 +261,7 @@ Gorush uses the Go Modules support built into Go 1.11 to build. The easiest way 
 ```sh
 mkdir $HOME/src
 cd $HOME/src
-git clone https://github.com/appleboy/gorush.git
+git clone https://github.com/tolki-app/gorush.git
 cd gorush
 go install
 ```
@@ -272,10 +272,10 @@ or you can use the `go get` command to install the latest or specific verison.
 
 ```sh
 # Go 1.16+
-go install github.com/appleboy/gorush@latest
+go install github.com/tolki-app/gorush@latest
 
 # Go version < 1.16
-go get -u github.com/appleboy/gorush@latest
+go get -u github.com/tolki-app/gorush@latest
 ```
 
 ### Command Usage
@@ -790,7 +790,7 @@ Add other fields which user defined via `data` field.
 }
 ```
 
-Support send notification from different environment. See the detail of [issue](https://github.com/appleboy/gorush/issues/246).
+Support send notification from different environment. See the detail of [issue](https://github.com/tolki-app/gorush/issues/246).
 
 ```diff
 {
@@ -1042,7 +1042,7 @@ import (
   "context"
   "log"
 
-  "github.com/appleboy/gorush/rpc/proto"
+  "github.com/tolki-app/gorush/rpc/proto"
 
   structpb "github.com/golang/protobuf/ptypes/struct"
   "google.golang.org/grpc"
@@ -1145,7 +1145,7 @@ import (
   "context"
   "log"
 
-  "github.com/appleboy/gorush/rpc/proto"
+  "github.com/tolki-app/gorush/rpc/proto"
 
   structpb "github.com/golang/protobuf/ptypes/struct"
   "google.golang.org/grpc"
@@ -1290,7 +1290,7 @@ AWS excited to [announce Go as a supported language for AWS Lambda](https://aws.
 Download source code first.
 
 ```sh
-git clone https://github.com/appleboy/gorush.git
+git clone https://github.com/tolki-app/gorush.git
 cd gorush && make build_linux_lambda
 ```
 
@@ -1324,7 +1324,7 @@ Or you can deploy gorush to alternative solution like [netlify functions](https:
   functions = "release/linux/lambda"
 
 [build.environment]
-  GO_IMPORT_PATH = "github.com/appleboy/gorush"
+  GO_IMPORT_PATH = "github.com/tolki-app/gorush"
   GO111MODULE = "on"
 
 [[redirects]]

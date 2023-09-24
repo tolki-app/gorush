@@ -1,4 +1,4 @@
-module github.com/appleboy/gorush
+module github.com/tolki-app/gorush
 
 go 1.18
 

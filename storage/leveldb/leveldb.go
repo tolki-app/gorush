@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/appleboy/gorush/config"
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/tolki-app/gorush/config"
 )
 
 func (s *Storage) setLevelDB(key string, count int64) {
@@ -20,7 +20,7 @@ func (s *Storage) getLevelDB(key string) int64 {
 	return count
 }
 
-// New func implements the storage interface for gorush (https://github.com/appleboy/gorush)
+// New func implements the storage interface for gorush (https://github.com/tolki-app/gorush)
 func New(config *config.ConfYaml) *Storage {
 	return &Storage{
 		config: config,

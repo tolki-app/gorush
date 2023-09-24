@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/appleboy/gorush/config"
-	"github.com/appleboy/gorush/core"
+	"github.com/tolki-app/gorush/config"
+	"github.com/tolki-app/gorush/core"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"

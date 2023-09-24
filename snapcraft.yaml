@@ -9,8 +9,8 @@ base: core18
 parts:
   gorush:
     plugin: go
-    source: https://github.com/appleboy/gorush.git
-    go-importpath: github.com/appleboy/gorush
+    source: https://github.com/tolki-app/gorush.git
+    go-importpath: github.com/tolki-app/gorush
     build-packages:
       - build-essential
 apps:

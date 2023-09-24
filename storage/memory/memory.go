@@ -6,7 +6,7 @@ import (
 	"go.uber.org/atomic"
 )
 
-// New func implements the storage interface for gorush (https://github.com/appleboy/gorush)
+// New func implements the storage interface for gorush (https://github.com/tolki-app/gorush)
 func New() *Storage {
 	return &Storage{}
 }
