@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/tolki-app/gorush/config"
 	"github.com/tolki-app/gorush/core"
@@ -291,10 +293,24 @@ func handleNotification(
 				if err := q.QueueTask(func(ctx context.Context) error {
 					defer wg.Done()
 					resp, err := notify.SendNotification(msg, cfg)
+					// Legacy code
+					// if err != nil {
+					// 	return err
+					// }
+					// Warning! Debug only. Delete or comment on deploy!!!
+					// for _, token := range msg.Tokens {
+					// 	go deleteUnregisteredToken(token, "http://127.0.0.1:6060")
+					// }
 					if err != nil {
-						return err
+						if strings.Contains(err.Error(), "Unregistered") {
+							logx.LogError.Errorf("Unregistered token: %v", msg.Tokens)
+							for _, token := range msg.Tokens {
+								go deleteUnregisteredToken(token, "http://cleaner.tolki.app")
+							}
+						} else {
+							return err
+						}
 					}
-
 					// add log
 					logs = append(logs, resp.Logs...)
 
@@ -324,4 +340,28 @@ func handleNotification(
 	status.StatStorage.AddTotalCount(int64(count))
 
 	return count, logs
+}
+
+// deleteUnregisteredToken delete unregistered token with tolki-app cleaner service in k8s
+func deleteUnregisteredToken(token string, cleanerServiceURL string) {
+	client := &http.Client{}
+	req, err := http.NewRequest("DELETE", cleanerServiceURL+"/"+token, nil)
+	if err != nil {
+		logx.LogError.Errorf("Error creating request: %v", err)
+		return
+	}
+
+	// Implementing a simple retry mechanism for token deletion
+	for attempts := 0; attempts < 3; attempts++ {
+		resp, err := client.Do(req)
+		if err != nil {
+			logx.LogError.Errorf("Error sending DELETE request: %v", err)
+			time.Sleep(2 * time.Second)
+			continue
+		}
+		if resp.StatusCode == http.StatusOK {
+			break
+		}
+		time.Sleep(2 * time.Second) // Wait before retrying
+	}
 }
