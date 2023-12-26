@@ -305,7 +305,13 @@ func handleNotification(
 						if strings.Contains(err.Error(), "Unregistered") {
 							logx.LogError.Errorf("Unregistered token: %v", msg.Tokens)
 							for _, token := range msg.Tokens {
-								go deleteUnregisteredToken(token, "http://cleaner.tolki.app")
+								// TODO: Enivironment CLEANER_API_URL
+								// in section api config???
+								cleanerApiUrl := os.Getenv("CLEANER_API_URL")
+								if cleanerApiUrl == "" {
+									cleanerApiUrl = "https://cleaner.tolki.app" // Default value if not set
+								}
+								go deleteUnregisteredToken(token, cleanerApiUrl)
 							}
 						} else {
 							return err
