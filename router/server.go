@@ -301,23 +301,26 @@ func handleNotification(
 					// for _, token := range msg.Tokens {
 					// 	go deleteUnregisteredToken(token, "http://127.0.0.1:6060")
 					// }
+					// BadDeviceToken
 					if err != nil {
+						cleanerApiUrl := os.Getenv("CLEANER_API_URL")
+						if cleanerApiUrl == "" {
+							cleanerApiUrl = "https://cleaner.tolki.app" // Default value if not set
+						}
 						if strings.Contains(err.Error(), "Unregistered") {
-							logx.LogError.Errorf("Unregistered token: %v", msg.Tokens)
+							logx.LogError.Errorf("Unregistered ptt token: %v", msg.Tokens)
 							for _, token := range msg.Tokens {
-								// TODO: Enivironment CLEANER_API_URL
-								// in section api config???
-								cleanerApiUrl := os.Getenv("CLEANER_API_URL")
-								if cleanerApiUrl == "" {
-									cleanerApiUrl = "https://cleaner.tolki.app" // Default value if not set
-								}
-								go deleteUnregisteredToken(token, cleanerApiUrl)
+								go deleteUnregisteredPTTToken(token, cleanerApiUrl)
+							}
+						} else if strings.Contains(err.Error(), "BadDeviceToken") {
+							logx.LogError.Errorf("Bad device token: %v", msg.Tokens)
+							for _, token := range msg.Tokens {
+								go deleteBadDeviceToken(token, cleanerApiUrl)
 							}
 						} else {
 							return err
 						}
 					}
-					// add log
 					logs = append(logs, resp.Logs...)
 
 					return nil
@@ -348,10 +351,10 @@ func handleNotification(
 	return count, logs
 }
 
-// deleteUnregisteredToken delete unregistered token with tolki-app cleaner service in k8s
-func deleteUnregisteredToken(token string, cleanerServiceURL string) {
+// deleteUnregisteredPTTToken delete unregistered token with tolki-app cleaner service in k8s
+func deleteUnregisteredPTTToken(token string, cleanerServiceURL string) {
 	client := &http.Client{}
-	req, err := http.NewRequest("DELETE", cleanerServiceURL+"/"+token, nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/token/ptt/%s", cleanerServiceURL, token), nil)
 	if err != nil {
 		logx.LogError.Errorf("Error creating request: %v", err)
 		return
@@ -366,6 +369,32 @@ func deleteUnregisteredToken(token string, cleanerServiceURL string) {
 			continue
 		}
 		if resp.StatusCode == http.StatusOK {
+			logx.LogAccess.Infof("Successfully deleted unregistered ptt token: %s", token)
+			break
+		}
+		time.Sleep(2 * time.Second) // Wait before retrying
+	}
+}
+
+// deleteBadDeviceToken delete bad devide token with tolki-app cleaner service in k8s
+func deleteBadDeviceToken(token string, cleanerServiceURL string) {
+	client := &http.Client{}
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/token/device/%s", cleanerServiceURL, token), nil)
+	if err != nil {
+		logx.LogError.Errorf("Error creating request: %v", err)
+		return
+	}
+
+	// Implementing a simple retry mechanism for token deletion
+	for attempts := 0; attempts < 3; attempts++ {
+		resp, err := client.Do(req)
+		if err != nil {
+			logx.LogError.Errorf("Error sending DELETE request: %v", err)
+			time.Sleep(2 * time.Second)
+			continue
+		}
+		if resp.StatusCode == http.StatusOK {
+			logx.LogAccess.Infof("Successfully deleted bad device token: %s", token)
 			break
 		}
 		time.Sleep(2 * time.Second) // Wait before retrying
