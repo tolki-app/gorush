@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/tolki-app/gorush/config"
 	"github.com/tolki-app/gorush/core"
 	"github.com/tolki-app/gorush/logx"
@@ -293,34 +294,37 @@ func handleNotification(
 				if err := q.QueueTask(func(ctx context.Context) error {
 					defer wg.Done()
 					resp, err := notify.SendNotification(msg, cfg)
-					// Legacy code
-					// if err != nil {
-					// 	return err
-					// }
+					if err != nil {
+						return err
+					}
 					// Warning! Debug only. Delete or comment on deploy!!!
 					// for _, token := range msg.Tokens {
 					// 	go deleteUnregisteredToken(token, "http://127.0.0.1:6060")
 					// }
 					// BadDeviceToken
-					if err != nil {
-						cleanerApiUrl := os.Getenv("CLEANER_API_URL")
-						if cleanerApiUrl == "" {
-							cleanerApiUrl = "https://cleaner.tolki.app" // Default value if not set
-						}
-						if strings.Contains(err.Error(), "Unregistered") {
-							logx.LogError.Errorf("Unregistered ptt token: %v", msg.Tokens)
-							for _, token := range msg.Tokens {
-								go deleteUnregisteredPTTToken(token, cleanerApiUrl)
+					// if resp.Logs.Type.conains() {
+					// TODO: Filter in generifcs logs with lib
+					// if err != nil {
+
+					// if resp.Logs[0].Type.conains("failed-push")
+					ll := lo.Filter(resp.Logs, func(v logx.LogPushEntry, _ int) bool {
+						return v.Error == "BadDeviceToken" || v.Error == "Unregistered"
+					})
+					tt := lo.Map(ll, func(v logx.LogPushEntry, _ int) string {
+						return strings.ReplaceAll(v.Token, "*", "")
+					})
+					mt := lo.Filter(msg.Tokens, func(token string, _ int) bool {
+						for _, t := range tt {
+							if strings.Contains(token, t) {
+								return true
 							}
-						} else if strings.Contains(err.Error(), "BadDeviceToken") {
-							logx.LogError.Errorf("Bad device token: %v", msg.Tokens)
-							for _, token := range msg.Tokens {
-								go deleteBadDeviceToken(token, cleanerApiUrl)
-							}
-						} else {
-							return err
 						}
+						return false
+					})
+					for _, token := range mt {
+						deleteBadDeviceToken(token, msg.PushType)
 					}
+
 					logs = append(logs, resp.Logs...)
 
 					return nil
@@ -377,26 +381,27 @@ func deleteUnregisteredPTTToken(token string, cleanerServiceURL string) {
 }
 
 // deleteBadDeviceToken delete bad devide token with tolki-app cleaner service in k8s
-func deleteBadDeviceToken(token string, cleanerServiceURL string) {
+func deleteBadDeviceToken(token string, tokenType string) {
+	cleanerApiUrl := os.Getenv("CLEANER_API_URL")
+	if cleanerApiUrl == "" {
+		cleanerApiUrl = "http://tolki-cleaner.default.svc.cluster.local"
+	}
+
 	client := &http.Client{}
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/token/device/%s", cleanerServiceURL, token), nil)
+	// /token/{token_id}
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/token/%s?type=%s", cleanerApiUrl, token, tokenType), nil)
 	if err != nil {
 		logx.LogError.Errorf("Error creating request: %v", err)
 		return
 	}
 
-	// Implementing a simple retry mechanism for token deletion
-	for attempts := 0; attempts < 3; attempts++ {
-		resp, err := client.Do(req)
-		if err != nil {
-			logx.LogError.Errorf("Error sending DELETE request: %v", err)
-			time.Sleep(2 * time.Second)
-			continue
-		}
-		if resp.StatusCode == http.StatusOK {
-			logx.LogAccess.Infof("Successfully deleted bad device token: %s", token)
-			break
-		}
-		time.Sleep(2 * time.Second) // Wait before retrying
+	resp, err := client.Do(req)
+	if err != nil {
+		logx.LogError.Errorf("Error creating request: %v", err)
+		return
+	}
+
+	if resp.StatusCode == http.StatusOK {
+		logx.LogAccess.Infof("Successfully deleted bad device token: %s", token)
 	}
 }
