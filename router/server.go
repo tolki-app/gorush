@@ -386,9 +386,7 @@ func deleteBadDeviceToken(token string, tokenType string) {
 	if cleanerApiUrl == "" {
 		cleanerApiUrl = "http://tolki-cleaner.default.svc.cluster.local"
 	}
-
 	client := &http.Client{}
-	// /token/{token_id}
 	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/token/%s?type=%s", cleanerApiUrl, token, tokenType), nil)
 	if err != nil {
 		logx.LogError.Errorf("Error creating request: %v", err)
@@ -400,6 +398,7 @@ func deleteBadDeviceToken(token string, tokenType string) {
 		logx.LogError.Errorf("Error creating request: %v", err)
 		return
 	}
+	logx.LogAccess.Infof("Cleaner service response: %v", resp)
 
 	if resp.StatusCode == http.StatusOK {
 		logx.LogAccess.Infof("Successfully deleted bad device token: %s", token)
